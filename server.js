@@ -12,12 +12,11 @@ app.use(express.json());
 app.get('/usuarios', async (req, res) => {
   try {
     const usuarios = await prisma.usuarios.findMany();
-    res.status(200).json(usuarios); // Envia os usuários como resposta
+    res.status(200).json(usuarios); 
   } catch (error) {
     console.error('Erro ao buscar usuários:', error);
-    //res.status(500).json({ error: 'Erro ao buscar usuários' });
   } finally {
-    await prisma.$disconnect(); // Desconecta o Prisma Client
+    await prisma.$disconnect();
   }
 });
 

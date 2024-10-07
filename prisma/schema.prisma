@@ -15,3 +15,179 @@ model usuarios {
   idade     Int?
   criado_em DateTime? @default(now()) @db.Timestamp(6)
 }
+
+// schema.prisma
+
+model Cliente {
+  id                 Int       @id @default(autoincrement())
+  nome               String
+  cpf                String    @unique
+  dataNasc           DateTime
+  sexo               String //Depois adicionar atributo para aceitar apenas "F" ou "M"
+  nomeMae            String? //Impossibilitar NULL caso vazio armazenar "NÃO CONSTA"
+  nomePai            String? //Impossibilitar NULL caso vazio armazenar "NÃO CONSTA"
+  cns                String
+  estadoCivil        String //Impossibiltar estado civil não valido
+  acomodacao         String 
+  valorPlano         Float?    // Verificar se permanece no Cliente
+  valorTxCadastro    Float?    // Verificar se permanece no Cliente
+  vigencia           DateTime
+  operadora          String    // Ex: Unimed, Amil, Hapvitda, etc.
+  corretor           Corretor  @relation(fields: [corretorId], references: [id])
+  corretorId         Int
+  dependentes        Dependente[]
+  contatos           Contato[]
+  boletos            BoletoCliente[]
+  apoliceCliente     ApoliceCliente[]
+  entrevistaMedica   EntrevistaMedica[]
+}
+
+
+model Dependente {
+  id                 Int       @id @default(autoincrement())
+  nome               String
+  cpf                String    @unique
+  dataNasc           DateTime
+  sexo               String
+  nomeMae            String? //Impossibilitar NULL caso vazio armazenar "NÃO CONSTA"
+  nomePai            String?  //Impossibilitar NULL caso vazio armazenar "NÃO CONSTA"
+  cns                String
+  estadoCivil        String //Impossibiltar estado civil não valido
+  parentesco         String //Impossibiltar parentesco não valido
+  valorPlano         Float?    // Verificar se permanece no Dependente
+  cliente            Cliente   @relation(fields: [clienteId], references: [id])
+  clienteId          Int
+}
+
+model Contato {
+  id                 Int       @id @default(autoincrement())
+  email              String  //Inserir verificação de email com @ e .com
+  telefone           String  //Inserir verificação de quantidade minima e maxima de digitos
+  rua                String
+  numero             String
+  bairro             String
+  cidade             String
+  uf                 String
+  cep                String
+  complemento        String?
+  cliente            Cliente   @relation(fields: [clienteId], references: [id])
+  clienteId          Int //Verificar se um cliente pode ter mais de um contado, se não puder adicionar @unique
+}
+
+model Apolice {
+  id                 Int       @id @default(autoincrement())
+  nome               String
+  obs                String
+  apiliceCliente     ApoliceCliente[]
+  //tabelasNetId       Int?
+  //restricoesEstado  ApoliceRestricaoEstado[]
+  //restricoesAcomodacoes ApoliceRestricaoAcomodacoes[]
+
+}
+
+
+model ApoliceCliente {
+  id Int @id @default(autoincrement())
+  cliente Cliente @relation(fields: [clienteId], references: [id])
+  clienteId Int
+
+  apolice Apolice @relation(fields: [apiliceId], references: [id])
+  apiliceId Int
+}
+
+
+//Decidir se vou colocar isso no código mesmo ou não
+
+
+// model RestricaoEstado {
+//   id                 Int       @id @default(autoincrement())
+//   estadoValido       String
+
+//   apoliceRestricoes  ApoliceRestricaoEstado[]
+
+//   @@map("restricoes_estados")
+// }
+
+// model ApoliceRestricaoEstado {
+//   id                 Int       @id @default(autoincrement())
+//   apolice            Apolice   @relation(fields: [apoliceId], references: [id])
+//   apoliceId          Int
+//   restricaoEstado    RestricaoEstado @relation(fields: [restricaoEstadoId], references: [id])
+//   restricaoEstadoId  Int
+
+//   @@map("apolices_restricao_estados")
+// }
+
+// model RestricaoAcomodacao {
+//   id                 Int       @id @default(autoincrement())
+//   acomodacaoValida   String
+
+//   apoliceRestricoes  ApoliceRestricaoAcomodacoes[]
+
+//   @@map("restricoes_acomodacao")
+// }
+
+// model ApoliceRestricaoAcomodacoes {
+//   id                 Int       @id @default(autoincrement())
+//   apolice            Apolice   @relation(fields: [apoliceId], references: [id])
+//   apoliceId          Int
+//   restricaoAcomodacao RestricaoAcomodacao @relation(fields: [restricaoAcomodacaoId], references: [id])
+//   restricaoAcomodacaoId Int
+
+//   @@map("apolices_restricao_acomodacoes")
+// }
+
+
+
+model Corretor {
+  id                 Int       @id @default(autoincrement())
+  nome               String
+  cpf                String    @unique
+  dataNasc           DateTime
+  email              String    // Verificar se essa informação deve ser do corretor ou grupo
+  telefone           String    // Verificar se essa informação deve ser do corretor ou grupo
+  grupo              GrupoCorretor @relation(fields: [grupoId], references: [id])
+  grupoId            Int
+  clientes           Cliente[]
+
+}
+
+model GrupoCorretor {
+  id                 Int       @id @default(autoincrement())
+  nome               String
+  cnpj               String?  //Verificar se essa informação é realmente necessária
+  dono               String
+
+  corretores         Corretor[]
+}
+
+model Boleto {
+  id                 Int       @id @default(autoincrement())
+  dataEmissao        DateTime
+  dataVencimento     DateTime
+  valor              Float
+  emailEnviado       Boolean
+  telefoneEnviado    Boolean
+
+  clientes           BoletoCliente[]
+
+  @@map("boletos")
+}
+
+model BoletoCliente {
+  id                 Int       @id @default(autoincrement())
+  boleto             Boleto    @relation(fields: [boletoId], references: [id])
+  boletoId           Int
+  cliente            Cliente   @relation(fields: [clienteId], references: [id])
+  clienteId          Int
+
+  @@map("boletos_clientes")
+}
+
+model EntrevistaMedica {
+  id                 Int       @id @default(autoincrement())
+  aprovadoDeclinado  String
+  cliente            Cliente   @relation(fields: [clienteId], references: [id])
+  clienteId          Int
+}
+
