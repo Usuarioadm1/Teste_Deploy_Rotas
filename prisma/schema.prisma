@@ -9,14 +9,20 @@ datasource db {
 
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
 model usuarios {
-  id        Int       @id @default(autoincrement())
-  nome      String    @db.VarChar(100)
-  email     String    @unique @db.VarChar(100)
+  id        Int           @id @default(autoincrement())
+  nome      String        @db.VarChar(100)
+  email     String        @unique @db.VarChar(100)
   idade     Int?
-  criado_em DateTime? @default(now()) @db.Timestamp(6)
+  criado_em DateTime?     @default(now()) @db.Timestamp(6)
+  contatos  ContatoUser[]
 }
 
-// schema.prisma
+model ContatoUser {
+  id        Int       @id @default(autoincrement())
+  telefone  String
+  usuario   usuarios  @relation(fields: [usuarioId], references: [id])
+  usuarioId Int
+}
 
 model Cliente {
   id                 Int       @id @default(autoincrement())
