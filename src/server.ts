@@ -2,12 +2,6 @@
 import { app, prisma } from './app';
 import { PORT } from './config/enviroment'
 
-
-
-
-
-
-
 const startServer = async () => {
   try {
     await prisma.$connect(); 

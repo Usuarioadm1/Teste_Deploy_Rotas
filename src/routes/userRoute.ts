@@ -1,9 +1,13 @@
 import express from 'express';
-import { criarUsuario } from '../controllers/userController';
+import { criarUsuario, visualizarUsuario, loginUsuario } from '../controllers/userController';
 
 const router = express.Router();
 
-// Rota para criar um novo usuário
-router.post('/usuarios', criarUsuario);
+router.post('/criar', criarUsuario);
+router.post('/login', loginUsuario);
+router.get('/visualizar', visualizarUsuario);
+
 
 export default router;
+
+
