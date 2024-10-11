@@ -1,6 +1,6 @@
 // src/server.ts
 import { app, prisma } from './app';
-import { PORT } from './config/enviroment'
+import { PORT } from './config/environment'
 
 const startServer = async () => {
   try {
