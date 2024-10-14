@@ -6,8 +6,8 @@ const startServer = async () => {
   try {
     await prisma.$connect(); 
     app.listen(PORT, () => {
-      //console.log(`http://localhost:${PORT}`);
-        console.log("O servidor esta rodando")
+      console.log(`http://localhost:${PORT}`);
+      console.log("O servidor esta rodando")
     });
   } catch (error) {
     console.error('Failed to connect to the database:', error);
