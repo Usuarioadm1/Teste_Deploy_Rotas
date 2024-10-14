@@ -1,7 +1,8 @@
 import express from 'express';
 import cors from 'cors'; 
 import { PrismaClient } from '@prisma/client'; 
-import usuarioRoutes from './routes/userRoute';
+import usuarioRoutes from './routes/userRoutes';
+import clientesRoutes from './routes/clienteRoute';
 
 const app = express();
 
@@ -11,7 +12,8 @@ app.use(cors());
 app.use(express.json()); 
 
 
-  app.use('/usuario', usuarioRoutes);
+app.use('/usuario', usuarioRoutes);
+app.use('/cliente', clientesRoutes);
   
 export { app, prisma };
 

@@ -1,9 +1,8 @@
 import jwt from 'jsonwebtoken';
 import bcrypt  from 'bcrypt';
+import { SECRET_KEY} from '../config/environment';
 import { PrismaClient } from '@prisma/client';
 import { Request, Response } from 'express';
-import { SECRET_KEY} from '../config/environment';
-import { error } from 'console';
 
 const prisma = new PrismaClient();
 
