@@ -83,7 +83,7 @@ model Apolice {
   id                 Int       @id @default(autoincrement())
   nome               String
   obs                String
-  apiliceCliente     ApoliceCliente[]
+  apoliceCliente     ApoliceCliente[]
   //tabelasNetId       Int?
   //restricoesEstado  ApoliceRestricaoEstado[]
   //restricoesAcomodacoes ApoliceRestricaoAcomodacoes[]
@@ -96,8 +96,8 @@ model ApoliceCliente {
   cliente Cliente @relation(fields: [clienteId], references: [id])
   clienteId Int
 
-  apolice Apolice @relation(fields: [apiliceId], references: [id])
-  apiliceId Int
+  apolice Apolice @relation(fields: [apoliceId], references: [id])
+  apoliceId Int
 }
 
 
